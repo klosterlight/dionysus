@@ -1,0 +1,32 @@
+version: '3'
+
+volumes:
+  postgres-data:
+  gems:
+
+services:
+  db:
+    image: postgres:9.5.1
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: P4Ssw0rD!
+
+  web:
+    build: .
+    ports:
+      - 3000:3000
+    command: rails server -b 0.0.0.0 -p 3000 -P /usr/src/app/tmp/rails.pid
+    entrypoint: /usr/bin/entrypoint.sh
+    volumes:
+      - .:/usr/src/app
+      - gems:/usr/local/bundle
+    working_dir: /usr/src/app
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+    env_file:
+      - dev.env
