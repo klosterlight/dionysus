@@ -24,5 +24,8 @@ module App
       :authentication => :plain,
       :enable_starttls_auto => true
     }
+    config.generators do |g|
+      g.test_framework nil
+    end
   end
 end
